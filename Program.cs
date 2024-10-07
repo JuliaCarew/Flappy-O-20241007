@@ -37,10 +37,12 @@ namespace Flappy_O_NEW
         static int FlappyPositionY;
         int LastPressedSpacebar = 0;
         // PIPE variable myPipe, PipePosX, PipeGap Start, PipeGap End
-          static char myPipe;
-            static int PipePositionX;
-            static char PipeGap = ' ';
-            static int PipeGapSize = 0;
+        static char myPipe = ' ';
+        static int PipePositionX = 0;
+        static char PipeGap = ' ';
+        static int PipeGapSize = 0;
+
+        static int Score = 0;
 
         //what happens when you run the game (or use the run game method)
         public void RunGame()
@@ -79,6 +81,9 @@ namespace Flappy_O_NEW
                 FrameCount = FrameCount + 1;
                 //clears the console while the game is running AT THE END
                 Console.Clear();
+
+                //Pipes();
+                MovePipes();
             }
             while (GameOver == true);
             {
@@ -102,33 +107,35 @@ namespace Flappy_O_NEW
                 LastFrameSpacePressed = FrameCount;
             }
         }
-        //all things included with pipes (position, updates, collisions)
-        class Pipe
-        {          
-            public Pipe(int PipePositionX, char PipeGap, int PipeGapSize)
-            {               
-                //for loop, keeps the bounds of the pipes within the console buffer??
-                for (int i = 0; i < Console.BufferHeight; i++)
+        static private void Pipes()
+        {
+            //for console height
+            for (int i = 0; i < Console.BufferHeight; i++)
+            {
+                Console.SetCursorPosition((Console.BufferWidth - 1), i);
+                Console.BackgroundColor = ConsoleColor.Green;
+                Console.Write(myPipe);
+
+                Console.BackgroundColor = ConsoleColor.Black;            
+            }
+        }
+        static private void MovePipes()
+        {
+            Pipes();
+            for (int i = 0;i < Console.BufferWidth; i++)
+            {         
+                //put posx on cursor position
+                Console.SetCursorPosition(Console.BufferWidth - 1, i);
+                PipePositionX = (Console.BufferWidth - 1);
+                
+                PipePositionX--;
+
+                if (PipePositionX < 0)
                 {
-                    //Console.SetCursorPosition(myPipe.PositionX, y);
-                    
-                    if (i == PipeGap)
-                    {
-                        Console.Write(' ');
-                        PipePositionX -= 1;
-                    }
-
-                    if (PipePositionX < 0)
-                    {
-                        PipePositionX = Console.BufferWidth - 1;
-                    }
-
-                    if (i != PipeGap)
-                    {
-                        Console.Write('\u2588');
-                    }
+                    PipePositionX = (Console.BufferWidth - 1);
+                    Score++;
                 }
-            }           
+            }
         }
     }
 }
