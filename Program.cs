@@ -38,7 +38,7 @@ namespace Flappy_O_NEW
         int LastPressedSpacebar = 0;
         // PIPE variable myPipe, PipePosX, PipeGap Start, PipeGap End
         static char myPipe = ' ';
-        static int PipePositionX = 0;
+        static int PipePositionX = -1;
         static char PipeGap = ' ';
         static int PipeGapSize = 0;
 
@@ -110,32 +110,34 @@ namespace Flappy_O_NEW
         static private void Pipes()
         {
             //for console height
+            // 0 -> 40
             for (int i = 0; i < Console.BufferHeight; i++)
             {
-                Console.SetCursorPosition((Console.BufferWidth - 1), i);
+                // i is 1
+                Console.SetCursorPosition(PipePositionX, i); //(40-1 = 39, 1)
+
                 Console.BackgroundColor = ConsoleColor.Green;
                 Console.Write(myPipe);
 
                 Console.BackgroundColor = ConsoleColor.Black;            
             }
         }
-        static private void MovePipes()
+        private void MovePipes()
         {
-            Pipes();
-            for (int i = 0;i < Console.BufferWidth; i++)
-            {         
+            Pipes();                     
                 //put posx on cursor position
-                Console.SetCursorPosition(Console.BufferWidth - 1, i);
-                PipePositionX = (Console.BufferWidth - 1);
+                PipePositionX = Console.BufferWidth - 15; 
+                //Console.SetCursorPosition(PipePositionX, i);
+                //need to increment Y every frame, can't set to a certain point or it will keep re-setting there
                 
                 PipePositionX--;
 
-                if (PipePositionX < 0)
+                if (PipePositionX < 0 || PipePositionX > Console.BufferWidth)
                 {
-                    PipePositionX = (Console.BufferWidth - 1);
+                    //PipePositionX = (Console.BufferWidth - 1);
                     Score++;
                 }
-            }
+            //loop through Y, take away two, set random Y position & loop, set position for pipe gap & draw pipe around it?
         }
     }
 }
